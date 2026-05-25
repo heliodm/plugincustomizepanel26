@@ -31,6 +31,26 @@ function apc_defaults() {
 		'button_text'            => '#ffffff',
 		'link_color'             => '#2271b1',
 
+		// ── Formulários ───────────────────────────────────────────────────
+		'input_bg'               => '#ffffff',
+		'input_border'           => '#8c8f94',
+		'input_focus_border'     => '#2271b1',
+		'input_text'             => '#2c3338',
+
+		// ── Badges / contadores ───────────────────────────────────────────
+		'badge_bg'               => '#d63638',
+		'badge_text'             => '#ffffff',
+
+		// ── Metaboxes ─────────────────────────────────────────────────────
+		'metabox_header_bg'      => '#f6f7f7',
+		'metabox_header_text'    => '#1d2327',
+
+		// ── Avisos (notices) ──────────────────────────────────────────────
+		'notice_success_border'  => '#00a32a',
+		'notice_error_border'    => '#d63638',
+		'notice_warning_border'  => '#dba617',
+		'notice_info_border'     => '#72aee6',
+
 		// ── Tipografia ────────────────────────────────────────────────────
 		'font_family'            => '',
 		'font_size_base'         => '13',
@@ -39,6 +59,9 @@ function apc_defaults() {
 
 		// ── Layout ────────────────────────────────────────────────────────
 		'border_radius'          => '3',
+		'content_max_width'      => '',
+		'disable_animations'     => '0',
+		'hide_adminbar_frontend' => '0',
 
 		// ── Logotipos ─────────────────────────────────────────────────────
 		'login_logo_url'         => '',
@@ -54,9 +77,26 @@ function apc_defaults() {
 
 		// ── Login ─────────────────────────────────────────────────────────
 		'login_bg'               => '#f0f0f1',
+		'login_form_bg'          => '#ffffff',
+		'login_form_border'      => '#c3c4c7',
 		'login_button_bg'        => '#2271b1',
 		'login_button_text'      => '#ffffff',
 		'login_title'            => '',
+		'login_redirect_url'     => '',
+		'login_back_text'        => '',
+		'login_custom_css'       => '',
+
+		// ── Dashboard ─────────────────────────────────────────────────────
+		'hide_dashboard_welcome'     => '0',
+		'hide_dashboard_at_glance'   => '0',
+		'hide_dashboard_activity'    => '0',
+		'hide_dashboard_quick_draft' => '0',
+		'hide_dashboard_news'        => '0',
+		'hide_dashboard_site_health' => '0',
+
+		// ── E-mail ────────────────────────────────────────────────────────
+		'mail_from_name'         => '',
+		'mail_from_email'        => '',
 
 		// ── Avançado ──────────────────────────────────────────────────────
 		'custom_css'             => '',

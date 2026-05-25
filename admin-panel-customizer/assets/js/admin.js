@@ -14,7 +14,7 @@
 		}
 	});
 
-	/* ── Troca de abas (preserva aba no hash) ── */
+	/* ── Troca de abas ── */
 	function activateTab(tab) {
 		$('.apc-tab').removeClass('active');
 		$('.apc-tab[data-tab="' + tab + '"]').addClass('active');
@@ -28,69 +28,85 @@
 		history.replaceState(null, '', '#' + tab);
 	});
 
-	// Restaura aba do hash ao carregar
 	var hash = window.location.hash.replace('#', '');
 	if ( hash && $('#apc-tab-' + hash).length ) {
 		activateTab(hash);
 	}
 
+	/* ── Aplica um conjunto de cores aos campos ── */
+	function applyColors(colors) {
+		$.each(colors, function (key, val) {
+			if ( /^#[0-9A-Fa-f]{6}$/.test(val) ) {
+				$('#' + key).val(val);
+				$('.apc-hex[data-for="' + key + '"]').val(val);
+			}
+		});
+	}
+
+	/* ── Presets de tema ── */
+	var presetsData = null;
+	try {
+		var raw = document.getElementById('apc-preset-data');
+		if (raw) { presetsData = JSON.parse(raw.textContent); }
+	} catch(e) {}
+
+	$(document).on('click', '.apc-preset-btn', function () {
+		var id = $(this).data('preset');
+		if ( !presetsData || !presetsData[id] ) { return; }
+
+		$('.apc-preset-btn').removeClass('active');
+		$(this).addClass('active');
+
+		applyColors( presetsData[id] );
+	});
+
 	/* ── Restaurar padrões ── */
 	$('#apc-reset').on('click', function () {
-		if ( !window.confirm('Restaurar todos os valores para o padrão do WordPress? Esta ação não pode ser desfeita.') ) {
+		if ( !window.confirm('Restaurar todos os valores para o padrão do WordPress? Essa ação não pode ser desfeita.') ) {
 			return;
 		}
 
-		// Campos de cor
-		var colorDefaults = {
-			menu_bg:                 '#1d2327',
-			menu_text:               '#a7aaad',
-			menu_highlight_bg:       '#2271b1',
-			menu_highlight_text:     '#ffffff',
-			menu_submenu_bg:         '#2c3338',
-			menu_submenu_text:       '#c3c4c7',
-			menu_submenu_hover_bg:   '#2271b1',
-			menu_submenu_hover_text: '#ffffff',
-			menu_border_color:       '#2c3338',
-			adminbar_bg:             '#1d2327',
-			adminbar_text:           '#a7aaad',
-			adminbar_hover_bg:       '#2c3338',
-			content_bg:              '#f0f0f1',
-			content_text:            '#3c434a',
-			content_box_bg:          '#ffffff',
-			content_box_border:      '#c3c4c7',
-			table_header_bg:         '#f6f7f7',
-			button_bg:               '#2271b1',
-			button_text:             '#ffffff',
-			link_color:              '#2271b1',
-			login_bg:                '#f0f0f1',
-			login_button_bg:         '#2271b1',
-			login_button_text:       '#ffffff'
-		};
+		// Usa os defaults enviados pelo PHP via wp_localize_script
+		var d = window.apcDefaults || {};
 
-		$.each(colorDefaults, function (key, val) {
-			$('#' + key).val(val);
-			$('.apc-hex[data-for="' + key + '"]').val(val);
+		// Aplica cores
+		var colorKeys = [
+			'menu_bg','menu_text','menu_highlight_bg','menu_highlight_text',
+			'menu_submenu_bg','menu_submenu_text','menu_submenu_hover_bg','menu_submenu_hover_text',
+			'menu_border_color','adminbar_bg','adminbar_text','adminbar_hover_bg',
+			'content_bg','content_text','content_box_bg','content_box_border',
+			'table_header_bg','metabox_header_bg','metabox_header_text',
+			'button_bg','button_text','link_color',
+			'input_bg','input_border','input_focus_border','input_text',
+			'badge_bg','badge_text',
+			'notice_success_border','notice_error_border','notice_warning_border','notice_info_border',
+			'login_bg','login_form_bg','login_form_border','login_button_bg','login_button_text'
+		];
+		colorKeys.forEach(function(key) {
+			if (d[key]) {
+				$('#' + key).val(d[key]);
+				$('.apc-hex[data-for="' + key + '"]').val(d[key]);
+			}
 		});
 
 		// Campos numéricos
-		$('#menu_width').val('160');
-		$('#adminbar_height').val('32');
-		$('#border_radius').val('3');
-		$('#font_size_base').val('13');
-		$('#menu_font_size').val('13');
+		['menu_width','adminbar_height','border_radius','font_size_base','menu_font_size',
+		 'login_logo_width','login_logo_height'].forEach(function(key) {
+			if (d[key] !== undefined) { $('#' + key).val(d[key]); }
+		});
 
-		// Campos de texto
-		$('#font_family').val('');
-		$('#google_font_url').val('');
-		$('#footer_left').val('');
-		$('#footer_right').val('');
-		$('#login_logo_width').val('84');
-		$('#login_logo_height').val('84');
-		$('#login_title').val('');
-		$('#custom_css').val('');
+		// Campos de texto e URL
+		['font_family','google_font_url','footer_left','footer_right','login_title',
+		 'login_redirect_url','login_back_text','content_max_width',
+		 'mail_from_name','mail_from_email','custom_css','login_custom_css'].forEach(function(key) {
+			$('#' + key).val('');
+		});
 
 		// Checkboxes
-		$('input[name="hide_wp_version"], input[name="hide_wp_logo"], input[name="hide_help_tab"], input[name="hide_screen_options"], input[name="hide_update_nag"]').prop('checked', false);
+		$('input[type="checkbox"][name]').prop('checked', false);
+
+		// Limpa seleção de preset ativo
+		$('.apc-preset-btn').removeClass('active');
 	});
 
 }(jQuery));

@@ -11,8 +11,10 @@ function apc_admin_css() {
 	$bh = absint( $s['adminbar_height'] );
 	$fs = absint( $s['font_size_base'] );
 	$mf = absint( $s['menu_font_size'] );
+	$cmw = absint( $s['content_max_width'] );
 	?>
 	<style id="apc-admin-css">
+
 	/* ── Tipografia ── */
 	<?php if ( ! empty( $s['font_family'] ) ) : ?>
 	#wpwrap, #wpcontent, #wpbody, #adminmenu { font-family: <?php echo esc_html( $s['font_family'] ); ?>; }
@@ -72,31 +74,70 @@ function apc_admin_css() {
 	.wrap h1, .wrap h2 { color: <?php echo esc_attr( $s['content_text'] ); ?>; }
 	a { color: <?php echo esc_attr( $s['link_color'] ); ?>; }
 
-	/* ── Caixas / metaboxes ── */
-	.postbox, .card, .wp-list-table, #wpbody-content .notice {
+	<?php if ( $cmw > 0 ) : ?>
+	#wpbody-content .wrap { max-width: <?php echo $cmw; ?>px; }
+	<?php endif; ?>
+
+	/* ── Caixas / cards ── */
+	.postbox, .card, #wpbody-content .notice {
 		background: <?php echo esc_attr( $s['content_box_bg'] ); ?> !important;
 		border-color: <?php echo esc_attr( $s['content_box_border'] ); ?> !important;
 		border-radius: <?php echo $br; ?>px !important;
 	}
 
+	/* ── Metabox — cabeçalho ── */
+	.postbox .postbox-header {
+		background: <?php echo esc_attr( $s['metabox_header_bg'] ); ?> !important;
+		border-bottom-color: <?php echo esc_attr( $s['content_box_border'] ); ?> !important;
+		border-radius: <?php echo $br; ?>px <?php echo $br; ?>px 0 0 !important;
+	}
+	.postbox .postbox-header h2,
+	.postbox .postbox-header .hndle { color: <?php echo esc_attr( $s['metabox_header_text'] ); ?> !important; }
+
 	/* ── Tabelas ── */
+	.wp-list-table { background: <?php echo esc_attr( $s['content_box_bg'] ); ?> !important; border-radius: <?php echo $br; ?>px !important; }
 	.wp-list-table thead th,
-	.wp-list-table tfoot th {
-		background: <?php echo esc_attr( $s['table_header_bg'] ); ?> !important;
+	.wp-list-table tfoot th { background: <?php echo esc_attr( $s['table_header_bg'] ); ?> !important; }
+
+	/* ── Formulários ── */
+	input[type="text"], input[type="email"], input[type="url"],
+	input[type="password"], input[type="number"], input[type="search"],
+	input[type="tel"], textarea, select {
+		background: <?php echo esc_attr( $s['input_bg'] ); ?> !important;
+		border-color: <?php echo esc_attr( $s['input_border'] ); ?> !important;
+		color: <?php echo esc_attr( $s['input_text'] ); ?> !important;
+		border-radius: <?php echo $br; ?>px !important;
+	}
+	input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus,
+	input[type="password"]:focus, input[type="number"]:focus, input[type="search"]:focus,
+	input[type="tel"]:focus, textarea:focus, select:focus {
+		border-color: <?php echo esc_attr( $s['input_focus_border'] ); ?> !important;
+		box-shadow: 0 0 0 1px <?php echo esc_attr( $s['input_focus_border'] ); ?> !important;
 	}
 
-	/* ── Botões primários ── */
+	/* ── Badges / contadores ── */
+	#adminmenu .awaiting-mod, #adminmenu .update-plugins,
+	.update-count, .plugin-count, #wp-admin-bar-updates .ab-label {
+		background: <?php echo esc_attr( $s['badge_bg'] ); ?> !important;
+		color: <?php echo esc_attr( $s['badge_text'] ); ?> !important;
+	}
+
+	/* ── Avisos (notices) ── */
+	.notice-success { border-left-color: <?php echo esc_attr( $s['notice_success_border'] ); ?> !important; }
+	.notice-error   { border-left-color: <?php echo esc_attr( $s['notice_error_border'] ); ?> !important; }
+	.notice-warning { border-left-color: <?php echo esc_attr( $s['notice_warning_border'] ); ?> !important; }
+	.notice-info    { border-left-color: <?php echo esc_attr( $s['notice_info_border'] ); ?> !important; }
+
+	/* ── Botões ── */
 	.button-primary, input[type="submit"].button-primary {
 		background: <?php echo esc_attr( $s['button_bg'] ); ?> !important;
 		border-color: <?php echo esc_attr( $s['button_bg'] ); ?> !important;
 		color: <?php echo esc_attr( $s['button_text'] ); ?> !important;
 		border-radius: <?php echo $br; ?>px !important;
 	}
-	.button {
-		border-radius: <?php echo $br; ?>px !important;
-	}
+	.button { border-radius: <?php echo $br; ?>px !important; }
 
-	/* ── Ícone do WP na admin bar ── */
+	/* ── Ícone WP na admin bar ── */
 	<?php if ( ! empty( $s['menu_icon_url'] ) ) : ?>
 	#wp-admin-bar-wp-logo .ab-icon::before { display: none !important; }
 	#wp-admin-bar-wp-logo .ab-icon {
@@ -112,10 +153,15 @@ function apc_admin_css() {
 	#wp-admin-bar-wp-logo { display: none !important; }
 	<?php endif; ?>
 
+	<?php if ( apc_get( 'disable_animations' ) === '1' ) : ?>
+	*, *::before, *::after { transition: none !important; animation: none !important; }
+	<?php endif; ?>
+
 	<?php if ( ! empty( $s['custom_css'] ) ) : ?>
 	/* ── CSS personalizado ── */
 	<?php echo wp_strip_all_tags( $s['custom_css'] ); ?>
 	<?php endif; ?>
+
 	</style>
 	<?php
 }
@@ -171,6 +217,78 @@ function apc_hide_update_nag() {
 	echo '<style>.update-nag, .updated.notice.update-nag { display:none !important; }</style>' . "\n";
 }
 
+/* ── Ocultar admin bar no frontend ─────────────────────────────────── */
+
+add_filter( 'show_admin_bar', 'apc_show_admin_bar' );
+function apc_show_admin_bar( $show ) {
+	if ( ! is_admin() && apc_get( 'hide_adminbar_frontend' ) === '1' ) {
+		return false;
+	}
+	return $show;
+}
+
+/* ── Widgets do Dashboard ───────────────────────────────────────────── */
+
+add_action( 'wp_dashboard_setup', 'apc_remove_dashboard_widgets' );
+function apc_remove_dashboard_widgets() {
+	$s = apc_get();
+
+	if ( $s['hide_dashboard_welcome'] === '1' ) {
+		remove_action( 'welcome_panel', 'wp_welcome_panel' );
+	}
+	if ( $s['hide_dashboard_at_glance'] === '1' ) {
+		remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
+	}
+	if ( $s['hide_dashboard_activity'] === '1' ) {
+		remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+	}
+	if ( $s['hide_dashboard_quick_draft'] === '1' ) {
+		remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
+	}
+	if ( $s['hide_dashboard_news'] === '1' ) {
+		remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
+	}
+	if ( $s['hide_dashboard_site_health'] === '1' ) {
+		remove_meta_box( 'dashboard_site_health', 'dashboard', 'normal' );
+	}
+}
+
+/* ── E-mail: nome e endereço do remetente ───────────────────────────── */
+
+add_filter( 'wp_mail_from_name', 'apc_mail_from_name' );
+function apc_mail_from_name( $name ) {
+	$custom = apc_get( 'mail_from_name' );
+	return ! empty( $custom ) ? $custom : $name;
+}
+
+add_filter( 'wp_mail_from', 'apc_mail_from_email' );
+function apc_mail_from_email( $email ) {
+	$custom = apc_get( 'mail_from_email' );
+	return ! empty( $custom ) ? $custom : $email;
+}
+
+/* ── Login: redirecionamento após login ─────────────────────────────── */
+
+add_filter( 'login_redirect', 'apc_login_redirect', 10, 3 );
+function apc_login_redirect( $redirect_to, $requested, $user ) {
+	$custom = apc_get( 'login_redirect_url' );
+	if ( ! empty( $custom ) && ! is_wp_error( $user ) ) {
+		return $custom;
+	}
+	return $redirect_to;
+}
+
+/* ── Login: texto do link "← Voltar para o site" ───────────────────── */
+
+add_filter( 'login_site_html_link', 'apc_login_back_link' );
+function apc_login_back_link( $link ) {
+	$text = apc_get( 'login_back_text' );
+	if ( empty( $text ) ) {
+		return $link;
+	}
+	return preg_replace( '/(<a[^>]*>)[^<]*(<\/a>)/', '$1' . esc_html( $text ) . '$2', $link );
+}
+
 /* ── CSS dinâmico na tela de login ──────────────────────────────────── */
 
 add_action( 'login_head', 'apc_login_css' );
@@ -182,7 +300,14 @@ function apc_login_css() {
 	<?php if ( ! empty( $s['font_family'] ) ) : ?>
 	body.login { font-family: <?php echo esc_html( $s['font_family'] ); ?>; }
 	<?php endif; ?>
+
 	body.login { background: <?php echo esc_attr( $s['login_bg'] ); ?>; }
+
+	#login, #loginform {
+		background: <?php echo esc_attr( $s['login_form_bg'] ); ?> !important;
+		border-color: <?php echo esc_attr( $s['login_form_border'] ); ?> !important;
+		border-radius: <?php echo $br; ?>px !important;
+	}
 
 	<?php if ( ! empty( $s['login_logo_url'] ) ) : ?>
 	#login h1 a, .login h1 a {
@@ -197,25 +322,37 @@ function apc_login_css() {
 
 	.login #nav a, .login #backtoblog a { color: <?php echo esc_attr( $s['link_color'] ); ?>; }
 
+	.login input[type="text"], .login input[type="password"] {
+		background: <?php echo esc_attr( $s['input_bg'] ); ?> !important;
+		border-color: <?php echo esc_attr( $s['input_border'] ); ?> !important;
+		color: <?php echo esc_attr( $s['input_text'] ); ?> !important;
+		border-radius: <?php echo $br; ?>px !important;
+	}
+	.login input[type="text"]:focus, .login input[type="password"]:focus {
+		border-color: <?php echo esc_attr( $s['input_focus_border'] ); ?> !important;
+		box-shadow: 0 0 0 1px <?php echo esc_attr( $s['input_focus_border'] ); ?> !important;
+	}
+
 	.login .button-primary {
 		background: <?php echo esc_attr( $s['login_button_bg'] ); ?> !important;
 		border-color: <?php echo esc_attr( $s['login_button_bg'] ); ?> !important;
 		color: <?php echo esc_attr( $s['login_button_text'] ); ?> !important;
 		border-radius: <?php echo $br; ?>px !important;
 	}
-	#loginform, #login { border-radius: <?php echo $br; ?>px !important; }
+
+	<?php if ( ! empty( $s['login_custom_css'] ) ) : ?>
+	<?php echo wp_strip_all_tags( $s['login_custom_css'] ); ?>
+	<?php endif; ?>
 	</style>
 	<?php
 }
 
-/* ── URL do logo na tela de login ───────────────────────────────────── */
+/* ── URL do logo ────────────────────────────────────────────────────── */
 
 add_filter( 'login_headerurl', 'apc_login_logo_url' );
 function apc_login_logo_url() {
 	return home_url();
 }
-
-/* ── Título do logo na tela de login ───────────────────────────────── */
 
 add_filter( 'login_headertext', 'apc_login_logo_title' );
 function apc_login_logo_title( $text ) {

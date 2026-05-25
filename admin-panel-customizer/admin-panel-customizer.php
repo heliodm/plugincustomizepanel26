@@ -3,7 +3,7 @@
  * Plugin Name: Admin Panel Customizer
  * Plugin URI:  https://github.com/heliodm/plugincustomizepanel26
  * Description: Personalize o painel administrativo do WordPress: cores, logotipos, rodapé e versão.
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      heliodm
  * License:     GPL-2.0+
  * Text Domain: apc
@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'APC_VERSION', '1.1.0' );
+define( 'APC_VERSION', '1.2.0' );
 define( 'APC_FILE',    __FILE__ );
 define( 'APC_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'APC_URL',     plugin_dir_url( __FILE__ ) );
