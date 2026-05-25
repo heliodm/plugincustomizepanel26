@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Processa o upload de imagem e retorna a URL ou WP_Error.
+ * Processa upload de imagem. Retorna URL, null (sem arquivo) ou WP_Error.
  */
 function apc_handle_upload( $file_key ) {
 	if ( empty( $_FILES[ $file_key ]['name'] ) ) {
@@ -13,8 +13,21 @@ function apc_handle_upload( $file_key ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 	}
 
-	$overrides = [ 'test_form' => false ];
-	$result    = wp_handle_upload( $_FILES[ $file_key ], $overrides );
+	$allowed_mimes = [
+		'jpg|jpeg|jpe' => 'image/jpeg',
+		'gif'          => 'image/gif',
+		'png'          => 'image/png',
+		'webp'         => 'image/webp',
+		'svg'          => 'image/svg+xml',
+		'ico'          => 'image/x-icon',
+	];
+
+	$overrides = [
+		'test_form' => false,
+		'mimes'     => $allowed_mimes,
+	];
+
+	$result = wp_handle_upload( $_FILES[ $file_key ], $overrides );
 
 	if ( isset( $result['error'] ) ) {
 		return new WP_Error( 'upload_error', $result['error'] );

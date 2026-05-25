@@ -1,4 +1,4 @@
-/* Admin Panel Customizer — página de configurações */
+/* Admin Panel Customizer */
 
 .apc-wrap { max-width: 1020px; }
 .apc-wrap > h1 { margin-bottom: 12px; }
@@ -15,13 +15,7 @@
 	padding: 12px 16px;
 	margin-bottom: 20px;
 }
-.apc-presets-label {
-	font-size: 12px;
-	font-weight: 600;
-	color: #50575e;
-	white-space: nowrap;
-	margin-right: 4px;
-}
+.apc-presets-label { font-size: 12px; font-weight: 600; color: #50575e; white-space: nowrap; margin-right: 4px; }
 .apc-preset-btn {
 	display: flex;
 	align-items: center;
@@ -36,26 +30,10 @@
 	color: #3c434a;
 	transition: border-color 0.15s, box-shadow 0.15s;
 }
-.apc-preset-btn:hover {
-	border-color: #2271b1;
-	box-shadow: 0 0 0 1px #2271b1;
-}
-.apc-preset-btn.active {
-	border-color: #2271b1;
-	background: #e8f0fb;
-	color: #2271b1;
-}
-.apc-preset-swatches {
-	display: flex;
-	gap: 2px;
-}
-.apc-preset-swatches i {
-	display: block;
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	border: 1px solid rgba(0,0,0,.15);
-}
+.apc-preset-btn:hover { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+.apc-preset-btn.active { border-color: #2271b1; background: #e8f0fb; color: #2271b1; }
+.apc-preset-swatches { display: flex; gap: 2px; }
+.apc-preset-swatches i { display: block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); }
 
 /* ── Abas ── */
 .apc-tabs {
@@ -66,7 +44,8 @@
 	margin-bottom: 24px;
 }
 .apc-tab {
-	padding: 8px 16px;
+	display: inline-block;
+	padding: 8px 15px;
 	background: #f0f0f1;
 	border: 1px solid #c3c4c7;
 	border-bottom: none;
@@ -75,15 +54,11 @@
 	font-size: 13px;
 	font-weight: 500;
 	color: #3c434a;
+	text-decoration: none;
 	transition: background 0.12s;
 }
-.apc-tab:hover  { background: #dcdcde; }
-.apc-tab.active {
-	background: #fff;
-	border-bottom: 2px solid #fff;
-	margin-bottom: -2px;
-	color: #2271b1;
-}
+.apc-tab:hover  { background: #dcdcde; color: #1d2327; }
+.apc-tab.active { background: #fff; border-bottom: 2px solid #fff; margin-bottom: -2px; color: #2271b1; }
 
 /* ── Painéis ── */
 .apc-panel        { display: none; }
@@ -107,11 +82,7 @@
 }
 
 /* ── Grid de cores ── */
-.apc-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-	gap: 14px 20px;
-}
+.apc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px 20px; }
 
 /* ── Campo de cor ── */
 .apc-field            { display: flex; flex-direction: column; gap: 5px; }
@@ -127,28 +98,13 @@ input[type="color"] {
 	cursor: pointer;
 	background: #fff;
 }
-.apc-hex {
-	width: 78px;
-	font-family: monospace;
-	font-size: 13px;
-}
+.apc-hex { width: 76px; font-family: monospace; font-size: 13px; }
 
 /* ── Preview de imagem ── */
-.apc-img-preview {
-	display: inline-block;
-	margin: 6px 0 10px;
-	padding: 10px 14px;
-	background: #f6f7f7;
-	border: 1px dashed #c3c4c7;
-	border-radius: 4px;
-}
+.apc-img-preview { display: inline-block; margin: 6px 0 10px; padding: 10px 14px; background: #f6f7f7; border: 1px dashed #c3c4c7; border-radius: 4px; }
 
 /* ── CSS personalizado ── */
-textarea.code {
-	font-family: monospace;
-	font-size: 13px;
-	resize: vertical;
-}
+textarea.code { font-family: monospace; font-size: 13px; resize: vertical; }
 
 /* ── Rodapé de ações ── */
 .apc-footer-actions {
@@ -159,3 +115,24 @@ textarea.code {
 	padding: 16px 0;
 	border-top: 1px solid #c3c4c7;
 }
+
+/* ── Página de Widgets ── */
+.apc-btn-danger { color: #d63638 !important; border-color: #d63638 !important; }
+.apc-btn-danger:hover { background: #d63638 !important; color: #fff !important; }
+.apc-row-editing { background: #f0f6ff !important; }
+
+.apc-link-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+}
+.apc-link-row input[type="text"],
+.apc-link-row input[type="url"] { flex: 1; min-width: 140px; }
+
+/* ── Widget type sections ── */
+.apc-wtype-section { border-top: 1px solid #f0f0f1; padding-top: 0; }
+
+/* ── Formulário add/edit widget ── */
+#apc-widget-form .form-table th { width: 180px; }
